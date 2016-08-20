@@ -1,0 +1,8 @@
+res/*
+*.swp
+*.c
+*.so
+*.html
+*.*~
+*.pyc
+build
