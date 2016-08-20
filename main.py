@@ -27,17 +27,17 @@ GLYPH_NUM = 0
 
 
 def get_position_generator():
-  # from numpy import sort
-
   def position_generator():
-    for y in linspace(EDGE, 1.0-EDGE, ROW_NUM):
+    for i, y in enumerate(linspace(EDGE, 1.0-EDGE, ROW_NUM)):
 
       x = EDGE
+      start = True
       while x<1.0-EDGE:
-        r = random()*GLYPH_WIDTH*1.5
-        if random()<0.2:
-          r *= 2.5
+        r = (0.3 + random()*0.7)*GLYPH_WIDTH*0.7
+        if not start and random()<0.2:
+          r += GLYPH_WIDTH*2
         x += r
+        start = False
         yield x,y
 
   return position_generator
