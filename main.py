@@ -3,15 +3,9 @@
 
 
 from numpy import linspace
-from numpy import pi
-from numpy import column_stack
-from numpy import cos
-from numpy import sin
-from numpy import array
 from numpy import sort
 from numpy.random import random
 
-TWOPI = 2.0*pi
 
 BACK = [1,1,1,1]
 FRONT = [0,0,0,0.001]
@@ -28,34 +22,30 @@ GAMMA = 1.6
 def make_creatures(sand):
   from modules.glyphs import Glyphs
 
-  # line_grid = linspace(EDGE, 1.0-EDGE, 40)
-  row_grid = linspace(EDGE, 1.0-EDGE, 20)
-
   glyph_size = 0.012
   offset_size = 0.0008
+  row_num = 20
+  line_num = 30
+
+  # line_grid = linspace(EDGE, 1.0-EDGE, 40)
+  row_grid = linspace(EDGE, 1.0-EDGE, row_num)
+
 
   G = Glyphs(glyph_size)
 
-  # lines = []
   for y in row_grid:
     print(y)
-    line_grid = sort(EDGE + random(40)*(1.0-2.0*EDGE))
-    line = G.write_line(line_grid, y)
-    # lines.append(line)
-    # sand.paint_dots(line)
+    line_grid = sort(EDGE + random(line_num)*(1.0-2.0*EDGE))
+    a, b = G.write_line(
+        line_grid,
+        y,
+        offset_size,
+        gnum=[4,6],
+        inum=200000
+        )
 
-    a = random(size=(len(line),1))*TWOPI
-    dd = column_stack((cos(a), sin(a)))*offset_size
-    l1 = line + dd
-    l2 = line + dd[::-1,:]*array((1,-1))
-    sand.paint_strokes(l1, l2, GRAINS)
+    sand.paint_strokes(a, b, GRAINS)
 
-
-  # last = lines.pop(0)
-  # for i, line in enumerate(lines):
-  #   print(i)
-  #   sand.paint_strokes(last, line, GRAINS)
-  #   last = line
 
 def main():
   from sand import Sand
