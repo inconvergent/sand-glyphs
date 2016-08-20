@@ -19,20 +19,17 @@ TWOPI = 2.0*pi
 class Glyphs(object):
   def __init__(
       self,
-      glyph_size
       ):
     self.i = 0
-    self.glyph_size = glyph_size
 
-  def write_line(self, line_grid, y, offset_size, gnum, inum):
+  def write_line(self, line_grid, y, glyph_sizes, offset_size, gnum, inum):
     self.i += len(line_grid)
 
     glyphs = []
-    for x in line_grid:
+    for x, s in zip(line_grid, glyph_sizes):
       glyph = random_points_in_circle(
           randint(*gnum),
-          x, y,
-          self.glyph_size
+          x, y, s
           )
       glyphs.append(glyph)
 
