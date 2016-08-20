@@ -4,51 +4,52 @@
 
 from numpy import linspace
 from numpy import sort
-from numpy import cumsum
-from numpy import ones
 from numpy.random import random
 
 
 BACK = [1,1,1,1]
 FRONT = [0,0,0,0.0001]
 
-SIZE = 2600
+SIZE = 1500
 ONE = 1./SIZE
 EDGE = 0.1
 
-
 GAMMA = 1.6
 
+GRAINS = 60
 
-def make_creatures(sand):
+def get_position_generator(row_num, glyph_num):
+  def position_generator():
+    for y in linspace(EDGE, 1.0-EDGE, row_num):
+      for x in sort(EDGE + random(glyph_num)*(1.0-2.0*EDGE)):
+        yield x,y
+  return position_generator
+
+
+def write(sand):
   from modules.glyphs import Glyphs
 
-  grains = 60
-  glyph_size = 0.010
+  glyph_width = 0.010
+  glyph_height = 2*glyph_width
+
   offset_size = 0.002
   row_num = 20
-  glyph_num = 30
+  glyph_num = 50
 
-  # line_grid = linspace(EDGE, 1.0-EDGE, 40)
-  row_grid = linspace(EDGE, 1.0-EDGE, row_num)
 
-  G = Glyphs()
+  G = Glyphs(
+      get_position_generator(row_num, glyph_num),
+      glyph_height,
+      glyph_width,
+      offset_size
+      )
 
-  for y in row_grid:
-    print(y)
-    # glyph_sizes = glyph_size + ones(glyph_num, 'float')
-    glyph_sizes = glyph_size + cumsum((1.0-2.0*random(glyph_num))*glyph_size*0.3)
-    line_grid = sort(EDGE + random(glyph_num)*(1.0-2.0*EDGE))
-    a, b = G.write_line(
-        line_grid,
-        y,
-        glyph_sizes,
-        offset_size,
-        gnum=[4,5],
-        inum=800000
-        )
-
-    sand.paint_strokes(a, b, grains)
+  i = 0
+  for a, b in G.write(gnum=[4,5], inum=10000):
+    sand.paint_strokes(a, b, GRAINS)
+    i += 1
+    if not i%100:
+      print(i)
 
 
 def main():
@@ -60,7 +61,7 @@ def main():
   sand.set_rgba(FRONT)
   fn = Fn(prefix='./res/', postfix='.png')
 
-  make_creatures(sand)
+  write(sand)
   # sand.set_bg(bw)
   name = fn.name()
   sand.write_to_png(name, GAMMA)

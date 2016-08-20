@@ -20,25 +20,31 @@ TWOPI = 2.0*pi
 class Glyphs(object):
   def __init__(
       self,
+      position_generator,
+      glyph_height,
+      glyph_width,
+      offset_size
       ):
     self.i = 0
 
-  def write_line(self, line_grid, y, glyph_sizes, offset_size, gnum, inum):
-    self.i += len(line_grid)
+    self.position_generator = position_generator
+    self.glyph_height = glyph_height
+    self.glyph_width = glyph_width
+    self.offset_size = offset_size
 
-    glyphs = []
-    for x, s in zip(line_grid, glyph_sizes):
+  def write(self, gnum, inum):
+    self.i += 1
+
+    for x,y in self.position_generator():
       glyph = random_points_in_circle(
           randint(*gnum),
-          x, y, s
+          x, y,
+          self.glyph_width
           )
-      glyphs.append(glyph)
-
-    line = _rnd_interpolate(row_stack(glyphs), inum, ordered=True)
-    # a = random(size=(len(line),1))*TWOPI
-    a = random()*TWOPI + cumsum((1.0-2.0*random(inum))*0.01)
-    dd = column_stack((cos(a), sin(a)))*offset_size
-    a = line + dd
-    b = line + dd[::-1,:]*array((1,-1))
-    return a, b
+      ig = _rnd_interpolate(glyph, inum, ordered=True)
+      a = random()*TWOPI + cumsum((1.0-2.0*random(inum))*0.01)
+      dd = column_stack((cos(a), sin(a)))*self.offset_size
+      a = ig + dd
+      b = ig + dd[::-1,:]*array((1,-1))
+      yield a, b
 
