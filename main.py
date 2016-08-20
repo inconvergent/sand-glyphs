@@ -40,7 +40,7 @@ def get_position_generator(y):
       x += r
       if not new:
         c += 1
-      yield x,y,False
+      yield x, y, new
   return position_generator
 
 

@@ -17,7 +17,7 @@ from modules.helpers import _rnd_interpolate
 
 TWOPI = 2.0*pi
 
-def do_write(self, glyphs, inum, theta):
+def _do_write(self, glyphs, inum, theta):
 
   stack = row_stack(glyphs)
   ig = _rnd_interpolate(stack, len(glyphs)*inum, ordered=True)
@@ -51,7 +51,7 @@ class Glyphs(object):
       # for i,(x,y,new) in enumerate(position_generator()):
 
       while True:
-        x,y,new = next(pg)
+        x, y, new = next(pg)
 
         self.i += 1
 
@@ -68,12 +68,12 @@ class Glyphs(object):
           glyphs.append(glyph)
           continue
 
-        yield do_write(self, glyphs, inum, theta)
+        yield _do_write(self, glyphs, inum, theta)
         glyphs = []
 
     except StopIteration:
       try:
-        yield do_write(self, glyphs, inum, theta)
+        yield _do_write(self, glyphs, inum, theta)
       except ValueError:
         return
       except TypeError:
