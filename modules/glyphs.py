@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from modules.helpers import _rnd_interpolate
+from numpy.random import randint
 from numpy import row_stack
 # from modules.helpers import _interpolate
 from modules.helpers import random_points_in_circle
@@ -17,12 +18,12 @@ class Glyphs(object):
     self.line_grid = line_grid
     self.glyph_size = glyph_size
 
-  def write_line(self, y, gnum=6, inum=2000000):
+  def write_line(self, y, gnum=[5,8], inum=200000):
 
     glyphs = []
     for x in self.line_grid:
       glyph = random_points_in_circle(
-          gnum,
+          randint(*gnum),
           x, y,
           self.glyph_size
           )
