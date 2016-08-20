@@ -6,13 +6,12 @@ from numpy import column_stack
 from numpy import cos
 from numpy import cumsum
 from numpy import pi
-from numpy import row_stack
 from numpy import sin
 from numpy.random import randint
 from numpy.random import random
 
 from modules.helpers import _rnd_interpolate
-from modules.helpers import random_points_in_circle
+
 
 TWOPI = 2.0*pi
 
@@ -33,18 +32,18 @@ class Glyphs(object):
     self.offset_size = offset_size
 
   def write(self, gnum, inum):
+    from modules.helpers import random_points_in_circle
     self.i += 1
 
     for x,y in self.position_generator():
 
-      # glyph = random_points_in_circle(
-      #     randint(*gnum),
-      #     x, y,
-      #     self.glyph_width
-      #     )
+      glyph = random_points_in_circle(
+          randint(*gnum),
+          0, 0, 0.5
+          )*array((self.glyph_width, self.glyph_height))
 
-      glyph = (1.0-2.0*random((randint(*gnum), 2))) * \
-              array((self.glyph_width, self.glyph_height))*0.5
+      # glyph = (1.0-2.0*random((randint(*gnum), 2))) * \
+      #         array((self.glyph_width, self.glyph_height))*0.5
 
       ig = array((x, y)) + \
           _rnd_interpolate(glyph, inum, ordered=True)

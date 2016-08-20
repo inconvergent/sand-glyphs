@@ -3,7 +3,6 @@
 
 
 from numpy import linspace
-from numpy import sort
 from numpy.random import random
 
 
@@ -16,22 +15,31 @@ EDGE = 0.1
 
 GAMMA = 1.6
 
-GRAINS = 60
+GRAINS = 40
 
-GLYPH_WIDTH = 0.008
-GLYPH_HEIGHT = 2*GLYPH_WIDTH
+GLYPH_WIDTH = 0.009
+GLYPH_HEIGHT = 2.1*GLYPH_WIDTH
 
-OFFSET_SIZE = 0.002
+OFFSET_SIZE = 0.0025
 
-ROW_NUM = 25
-GLYPH_NUM = 70
+ROW_NUM = 20
+GLYPH_NUM = 0
 
 
 def get_position_generator():
+  # from numpy import sort
+
   def position_generator():
     for y in linspace(EDGE, 1.0-EDGE, ROW_NUM):
-      for x in sort(EDGE + random(GLYPH_NUM)*(1.0-2.0*EDGE)):
+
+      x = EDGE
+      while x<1.0-EDGE:
+        r = random()*GLYPH_WIDTH*1.5
+        if random()<0.2:
+          r *= 2.5
+        x += r
         yield x,y
+
   return position_generator
 
 
