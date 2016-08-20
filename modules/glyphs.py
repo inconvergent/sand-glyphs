@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from modules.helpers import _rnd_interpolate
-from numpy.random import randint
-from numpy import row_stack
-from modules.helpers import random_points_in_circle
-from numpy.random import random
 
-from numpy import pi
-TWOPI = 2.0*pi
-
+from numpy import array
 from numpy import column_stack
 from numpy import cos
+from numpy import pi
+from numpy import row_stack
 from numpy import sin
-from numpy import array
+from numpy.random import randint
+from numpy.random import random
+
+from modules.helpers import _rnd_interpolate
+from modules.helpers import random_points_in_circle
+
+TWOPI = 2.0*pi
 
 
 class Glyphs(object):
@@ -21,10 +22,10 @@ class Glyphs(object):
       glyph_size
       ):
     self.i = 0
-
     self.glyph_size = glyph_size
 
   def write_line(self, line_grid, y, offset_size, gnum, inum):
+    self.i += len(line_grid)
 
     glyphs = []
     for x in line_grid:

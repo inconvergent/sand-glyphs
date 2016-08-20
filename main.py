@@ -10,11 +10,10 @@ from numpy.random import random
 BACK = [1,1,1,1]
 FRONT = [0,0,0,0.001]
 
-SIZE = 1500
+SIZE = 2600
 ONE = 1./SIZE
 EDGE = 0.1
 
-GRAINS = 25
 
 GAMMA = 1.6
 
@@ -22,10 +21,11 @@ GAMMA = 1.6
 def make_creatures(sand):
   from modules.glyphs import Glyphs
 
+  grains = 50
   glyph_size = 0.012
-  offset_size = 0.0008
+  offset_size = 0.001
   row_num = 20
-  line_num = 30
+  line_num = 50
 
   # line_grid = linspace(EDGE, 1.0-EDGE, 40)
   row_grid = linspace(EDGE, 1.0-EDGE, row_num)
@@ -44,7 +44,7 @@ def make_creatures(sand):
         inum=200000
         )
 
-    sand.paint_strokes(a, b, GRAINS)
+    sand.paint_strokes(a, b, grains)
 
 
 def main():
