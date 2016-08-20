@@ -36,12 +36,18 @@ class Glyphs(object):
     self.i += 1
 
     for x,y in self.position_generator():
-      glyph = random_points_in_circle(
-          randint(*gnum),
-          x, y,
-          self.glyph_width
-          )
-      ig = _rnd_interpolate(glyph, inum, ordered=True)
+
+      # glyph = random_points_in_circle(
+      #     randint(*gnum),
+      #     x, y,
+      #     self.glyph_width
+      #     )
+
+      glyph = (1.0-2.0*random((randint(*gnum), 2))) * \
+              array((self.glyph_width, self.glyph_height))*0.5
+
+      ig = array((x, y)) + \
+          _rnd_interpolate(glyph, inum, ordered=True)
       a = random()*TWOPI + cumsum((1.0-2.0*random(inum))*0.01)
       dd = column_stack((cos(a), sin(a)))*self.offset_size
       a = ig + dd

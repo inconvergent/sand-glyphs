@@ -36,7 +36,6 @@ def write(sand):
   row_num = 20
   glyph_num = 50
 
-
   G = Glyphs(
       get_position_generator(row_num, glyph_num),
       glyph_height,
