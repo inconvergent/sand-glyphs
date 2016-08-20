@@ -8,6 +8,7 @@ from numpy import column_stack
 from numpy import cos
 from numpy import sin
 from numpy import array
+from numpy import sort
 from numpy.random import random
 
 TWOPI = 2.0*pi
@@ -27,18 +28,19 @@ GAMMA = 1.6
 def make_creatures(sand):
   from modules.glyphs import Glyphs
 
-  line_grid = linspace(EDGE, 1.0-EDGE, 40)
+  # line_grid = linspace(EDGE, 1.0-EDGE, 40)
   row_grid = linspace(EDGE, 1.0-EDGE, 20)
 
   glyph_size = 0.012
   offset_size = 0.0008
 
-  G = Glyphs(line_grid, glyph_size)
+  G = Glyphs(glyph_size)
 
   # lines = []
   for y in row_grid:
     print(y)
-    line = G.write_line(y)
+    line_grid = sort(EDGE + random(40)*(1.0-2.0*EDGE))
+    line = G.write_line(line_grid, y)
     # lines.append(line)
     # sand.paint_dots(line)
 
