@@ -4,6 +4,7 @@
 from numpy import array
 from numpy import column_stack
 from numpy import cos
+from numpy import cumsum
 from numpy import pi
 from numpy import row_stack
 from numpy import sin
@@ -33,9 +34,9 @@ class Glyphs(object):
           )
       glyphs.append(glyph)
 
-
     line = _rnd_interpolate(row_stack(glyphs), inum, ordered=True)
-    a = random(size=(len(line),1))*TWOPI
+    # a = random(size=(len(line),1))*TWOPI
+    a = random()*TWOPI + cumsum((1.0-2.0*random(inum))*0.01)
     dd = column_stack((cos(a), sin(a)))*offset_size
     a = line + dd
     b = line + dd[::-1,:]*array((1,-1))
