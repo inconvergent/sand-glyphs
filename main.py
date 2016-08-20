@@ -5,9 +5,9 @@
 from numpy import linspace
 
 BACK = [1,1,1,1]
-FRONT = [0,0,0,0.0001]
+FRONT = [0,0,0,0.001]
 
-SIZE = 2000
+SIZE = 1500
 ONE = 1./SIZE
 EDGE = 0.1
 
@@ -19,7 +19,7 @@ GAMMA = 1.6
 def make_creatures(sand):
   from modules.glyphs import Glyphs
 
-  line_grid = linspace(EDGE, 1.0-EDGE, 50)
+  line_grid = linspace(EDGE, 1.0-EDGE, 40)
   glyph_size = 0.01
 
   G = Glyphs(line_grid, glyph_size)

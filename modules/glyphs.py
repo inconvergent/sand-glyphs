@@ -17,7 +17,7 @@ class Glyphs(object):
     self.line_grid = line_grid
     self.glyph_size = glyph_size
 
-  def write_line(self, y, gnum=6, inum=20000):
+  def write_line(self, y, gnum=6, inum=2000000):
 
     glyphs = []
     for x in self.line_grid:
