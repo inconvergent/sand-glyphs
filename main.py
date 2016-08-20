@@ -15,7 +15,7 @@ EDGE = 0.1
 
 GAMMA = 1.6
 
-GRAINS = 40
+GRAINS = 25
 
 GLYPH_WIDTH = 0.009
 GLYPH_HEIGHT = 2.1*GLYPH_WIDTH
@@ -23,23 +23,24 @@ GLYPH_HEIGHT = 2.1*GLYPH_WIDTH
 OFFSET_SIZE = 0.0025
 
 ROW_NUM = 20
-GLYPH_NUM = 0
 
 
-def get_position_generator():
+def get_position_generator(y):
   def position_generator():
-    for i, y in enumerate(linspace(EDGE, 1.0-EDGE, ROW_NUM)):
+    x = EDGE
+    c = 0
+    while x<1.0-EDGE:
+      r = (0.3 + random()*0.7)*GLYPH_WIDTH*0.7
+      new = False
 
-      x = EDGE
-      start = True
-      while x<1.0-EDGE:
-        r = (0.3 + random()*0.7)*GLYPH_WIDTH*0.7
-        if not start and random()<0.2:
-          r += GLYPH_WIDTH*2
-        x += r
-        start = False
-        yield x,y
-
+      if c>0 and random()<0.1:
+        r += GLYPH_WIDTH*2
+        new = True
+        c = 0
+      x += r
+      if not new:
+        c += 1
+      yield x,y,new
   return position_generator
 
 
@@ -47,18 +48,19 @@ def write(sand):
   from modules.glyphs import Glyphs
 
   G = Glyphs(
-      get_position_generator(),
       GLYPH_HEIGHT,
       GLYPH_WIDTH,
       OFFSET_SIZE
       )
 
-  i = 0
-  for a, b in G.write(gnum=[4,5], inum=10000):
-    sand.paint_strokes(a, b, GRAINS)
-    i += 1
-    if not i%100:
-      print(i)
+  for y in linspace(EDGE, 1.0-EDGE, ROW_NUM):
+    print(y)
+    for a, b in G.write(
+        get_position_generator(y),
+        gnum = 4,
+        inum = 10000
+        ):
+      sand.paint_strokes(a, b, GRAINS)
 
 
 def main():
