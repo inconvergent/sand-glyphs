@@ -17,6 +17,17 @@ from modules.helpers import _rnd_interpolate
 
 TWOPI = 2.0*pi
 
+def do_write(self, glyphs, inum, theta):
+
+  stack = row_stack(glyphs)
+  ig = _rnd_interpolate(stack, len(glyphs)*inum, ordered=True)
+
+  gamma = theta + cumsum((1.0-2.0*random(len(ig)))*0.03)
+  dd = column_stack((cos(gamma), sin(gamma)))*self.offset_size
+  a = ig + dd
+  b = ig + dd[::-1,:]*array((1,-1))
+  return a, b
+
 
 class Glyphs(object):
   def __init__(
@@ -35,30 +46,35 @@ class Glyphs(object):
     glyphs = []
 
     theta = random()*TWOPI
-    for i,(x,y,new) in enumerate(position_generator()):
-      self.i += 1
+    pg = position_generator()
+    try:
+      # for i,(x,y,new) in enumerate(position_generator()):
 
-      angle = sort((random()*0 + random(gnum))*TWOPI)[::-1]
-      glyph = array((x, y)) + column_stack((cos(angle), sin(angle))) \
-          * array((self.glyph_width, self.glyph_height))
-      #
-      # glyph = array((x, y)) + random_points_in_circle(
-      #     gnum,
-      #     0, 0, 0.5
-      #     )*array((self.glyph_width, self.glyph_height))
+      while True:
+        x,y,new = next(pg)
 
-      if not new:
-        glyphs.append(glyph)
-        continue
+        self.i += 1
 
-      stack = row_stack(glyphs)
-      ig = _rnd_interpolate(stack, len(glyphs)*inum, ordered=True)
-      glyphs = []
+        # angle = sort((random()*0 + random(gnum))*TWOPI)[::-1]
+        # glyph = array((x, y)) + column_stack((cos(angle), sin(angle))) \
+        #     * array((self.glyph_width, self.glyph_height))
 
-      gamma = theta + cumsum((1.0-2.0*random(len(ig)))*0.03)
-      dd = column_stack((cos(gamma), sin(gamma)))*self.offset_size
-      a = ig + dd
-      b = ig + dd[::-1,:]*array((1,-1))
+        glyph = array((x, y)) + random_points_in_circle(
+            gnum,
+            0, 0, 0.5
+            )*array((self.glyph_width, self.glyph_height))
 
-      yield a, b
+        if not new:
+          glyphs.append(glyph)
+          continue
 
+        yield do_write(self, glyphs, inum, theta)
+        glyphs = []
+
+    except StopIteration:
+      try:
+        yield do_write(self, glyphs, inum, theta)
+      except ValueError:
+        return
+      except TypeError:
+        return

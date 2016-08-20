@@ -17,7 +17,7 @@ GAMMA = 1.6
 
 GRAINS = 30
 
-GLYPH_WIDTH = 0.009*0.25
+GLYPH_WIDTH = 0.009*0.5
 GLYPH_HEIGHT = 2.1*GLYPH_WIDTH
 
 OFFSET_SIZE = 0.0012
@@ -40,7 +40,7 @@ def get_position_generator(y):
       x += r
       if not new:
         c += 1
-      yield x,y,new
+      yield x,y,False
   return position_generator
 
 
