@@ -11,21 +11,31 @@ SIZE = 2000
 ONE = 1./SIZE
 EDGE = 0.1
 
+GRAINS = 5000
+
 GAMMA = 1.6
 
 
 def make_creatures(sand):
   from modules.glyphs import Glyphs
 
-  line_grid = linspace(EDGE, 1.0-EDGE, 10)
-  letter_size = 0.01
+  line_grid = linspace(EDGE, 1.0-EDGE, 50)
+  glyph_size = 0.01
 
-  G = Glyphs(line_grid, letter_size)
+  G = Glyphs(line_grid, glyph_size)
 
+  # lines = []
   for y in line_grid:
     print(y)
     line = G.write_line(y)
+    # lines.append(line)
     sand.paint_dots(line)
+
+  # last = lines.pop(0)
+  # for i, line in enumerate(lines):
+  #   print(i)
+  #   sand.paint_strokes(last, line, GRAINS)
+  #   last = line
 
 def main():
   from sand import Sand

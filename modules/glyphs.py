@@ -10,21 +10,21 @@ class Glyphs(object):
   def __init__(
       self,
       line_grid,
-      letter_size,
+      glyph_size
       ):
     self.i = 0
 
     self.line_grid = line_grid
-    self.letter_size = letter_size
+    self.glyph_size = glyph_size
 
-  def write_line(self, y, gnum=6, inum=200):
+  def write_line(self, y, gnum=6, inum=20000):
 
     glyphs = []
     for x in self.line_grid:
       glyph = random_points_in_circle(
           gnum,
           x, y,
-          self.size
+          self.glyph_size
           )
       glyphs.append(glyph)
 
