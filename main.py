@@ -18,10 +18,19 @@ GAMMA = 1.6
 
 GRAINS = 60
 
-def get_position_generator(row_num, glyph_num):
+GLYPH_WIDTH = 0.008
+GLYPH_HEIGHT = 2*GLYPH_WIDTH
+
+OFFSET_SIZE = 0.002
+
+ROW_NUM = 25
+GLYPH_NUM = 70
+
+
+def get_position_generator():
   def position_generator():
-    for y in linspace(EDGE, 1.0-EDGE, row_num):
-      for x in sort(EDGE + random(glyph_num)*(1.0-2.0*EDGE)):
+    for y in linspace(EDGE, 1.0-EDGE, ROW_NUM):
+      for x in sort(EDGE + random(GLYPH_NUM)*(1.0-2.0*EDGE)):
         yield x,y
   return position_generator
 
@@ -29,18 +38,11 @@ def get_position_generator(row_num, glyph_num):
 def write(sand):
   from modules.glyphs import Glyphs
 
-  glyph_width = 0.010
-  glyph_height = 2*glyph_width
-
-  offset_size = 0.002
-  row_num = 20
-  glyph_num = 50
-
   G = Glyphs(
-      get_position_generator(row_num, glyph_num),
-      glyph_height,
-      glyph_width,
-      offset_size
+      get_position_generator(),
+      GLYPH_HEIGHT,
+      GLYPH_WIDTH,
+      OFFSET_SIZE
       )
 
   i = 0
