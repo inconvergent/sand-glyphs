@@ -8,7 +8,7 @@ from numpy import cumsum
 from numpy import pi
 from numpy import sin
 from numpy import row_stack
-from numpy.random import randint
+from numpy import sort
 from numpy.random import random
 
 from modules.helpers import random_points_in_circle
@@ -33,13 +33,19 @@ class Glyphs(object):
 
   def write(self, position_generator, gnum, inum):
     glyphs = []
-    for x,y,new in position_generator():
+
+    theta = random()*TWOPI
+    for i,(x,y,new) in enumerate(position_generator()):
       self.i += 1
 
-      glyph = array((x, y)) + random_points_in_circle(
-          gnum,
-          0, 0, 0.5
-          )*array((self.glyph_width, self.glyph_height))
+      angle = sort((random()*0 + random(gnum))*TWOPI)[::-1]
+      glyph = array((x, y)) + column_stack((cos(angle), sin(angle))) \
+          * array((self.glyph_width, self.glyph_height))
+      #
+      # glyph = array((x, y)) + random_points_in_circle(
+      #     gnum,
+      #     0, 0, 0.5
+      #     )*array((self.glyph_width, self.glyph_height))
 
       if not new:
         glyphs.append(glyph)
@@ -49,8 +55,8 @@ class Glyphs(object):
       ig = _rnd_interpolate(stack, len(glyphs)*inum, ordered=True)
       glyphs = []
 
-      a = random()*TWOPI + cumsum((1.0-2.0*random(len(ig)))*0.01)
-      dd = column_stack((cos(a), sin(a)))*self.offset_size
+      gamma = theta + cumsum((1.0-2.0*random(len(ig)))*0.03)
+      dd = column_stack((cos(gamma), sin(gamma)))*self.offset_size
       a = ig + dd
       b = ig + dd[::-1,:]*array((1,-1))
 
