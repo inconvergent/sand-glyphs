@@ -9,20 +9,20 @@ from numpy.random import random
 BACK = [1,1,1,1]
 FRONT = [0,0,0,0.0001]
 
-SIZE = 2600
+SIZE = 1600
 ONE = 1./SIZE
 EDGE = 0.1
 
-GAMMA = 1.6
+GAMMA = 1.8
 
 GRAINS = 30
 
-GLYPH_WIDTH = 0.009*0.5
-GLYPH_HEIGHT = 2.1*GLYPH_WIDTH
+GLYPH_HEIGHT = 0.03
+GLYPH_WIDTH = 0.005
 
 OFFSET_SIZE = 0.0012
 
-ROW_NUM = 40
+ROW_NUM = 10
 
 
 def get_position_generator(y):
