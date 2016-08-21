@@ -35,13 +35,13 @@ def _get_glyph(gnum, height, width):
   else:
     f = lambda: gnum
 
-  a = sort(TWOPI*random(f()))[::-1]
-  glyph = column_stack((cos(a), sin(a)))*array((width, height), 'float')*0.5
+  # a = sort(TWOPI*random(f()))[::-1]
+  # glyph = column_stack((cos(a), sin(a)))*array((width, height), 'float')*0.5
 
-  # glyph = + random_points_in_circle(
-  #     f(), 0, 0, 0.5
-  #     )*array((width, height), 'float')
-  # _spatial_sort(glyph)
+  glyph = + random_points_in_circle(
+      f(), 0, 0, 0.5
+      )*array((width, height), 'float')
+  _spatial_sort(glyph)
 
   return glyph
 
