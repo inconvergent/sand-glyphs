@@ -5,12 +5,12 @@ from numpy import array
 from numpy import column_stack
 from numpy import cos
 from numpy import cumsum
+from numpy import sort
 from numpy import pi
 from numpy import sin
 from numpy import row_stack
 from numpy.random import random
 
-from modules.helpers import random_points_in_circle
 from modules.helpers import _rnd_interpolate
 
 
@@ -27,17 +27,21 @@ def _write_with_cursive(self, glyphs, inum, theta):
   return a, b
 
 def _get_glyph(gnum, height, width):
+  from modules.helpers import random_points_in_circle
+
   if isinstance(gnum, list):
     from numpy.random import randint
     f = lambda: randint(*gnum)
   else:
     f = lambda: gnum
 
-  glyph = + random_points_in_circle(
-      f(), 0, 0, 0.5
-      )*array((width, height), 'float')
+  a = sort(TWOPI*random(f()))[::-1]
+  glyph = column_stack((cos(a), sin(a)))*array((width, height), 'float')*0.5
 
-  _spatial_sort(glyph)
+  # glyph = + random_points_in_circle(
+  #     f(), 0, 0, 0.5
+  #     )*array((width, height), 'float')
+  # _spatial_sort(glyph)
 
   return glyph
 
