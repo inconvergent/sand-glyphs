@@ -9,7 +9,7 @@ from numpy.random import random
 BACK = [1,1,1,1]
 FRONT = [0,0,0,0.0001]
 
-SIZE = 1600
+SIZE = 1000
 ONE = 1./SIZE
 EDGE = 0.1
 
@@ -17,12 +17,12 @@ GAMMA = 1.8
 
 GRAINS = 30
 
-GLYPH_HEIGHT = 0.03
+GLYPH_HEIGHT = 0.02
 GLYPH_WIDTH = 0.005
 
 OFFSET_SIZE = 0.0012
 
-ROW_NUM = 10
+ROW_NUM = 15
 
 
 def get_position_generator(y):
@@ -33,7 +33,7 @@ def get_position_generator(y):
       r = (0.7 + random()*1.3)*GLYPH_WIDTH
       new = False
 
-      if c>1 and random()<0.1:
+      if c>2 and random()<0.15:
         r += GLYPH_WIDTH*2
         new = True
         c = 0
@@ -62,7 +62,7 @@ def write(sand):
     print(y)
     for a, b in G.write(
         get_position_generator(y),
-        gnum = 3,
+        gnum = [3,7],
         inum = 10000
         ):
 

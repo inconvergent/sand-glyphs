@@ -27,11 +27,39 @@ def _write_with_cursive(self, glyphs, inum, theta):
   return a, b
 
 def _get_glyph(gnum, height, width):
+  if isinstance(gnum, list):
+    from numpy.random import randint
+    f = lambda: randint(*gnum)
+  else:
+    f = lambda: gnum
+
   glyph = + random_points_in_circle(
-      gnum,
-      0, 0, 0.5
+      f(), 0, 0, 0.5
       )*array((width, height), 'float')
+
+  _spatial_sort(glyph)
+
   return glyph
+
+def _spatial_sort(glyph):
+  from scipy.spatial.distance import cdist
+  from numpy import argsort
+  curr = 0
+  visited = set([curr])
+  order = [curr]
+
+  dd = cdist(glyph, glyph)
+
+  while len(visited)<len(glyph):
+    row = dd[curr,:]
+
+    for i in argsort(row):
+      if row[i]<=0.0 or i==curr or i in visited:
+        continue
+      order.append(i)
+      visited.add(i)
+      break
+  glyph[:,:] = glyph[order,:]
 
 
 class Glyphs(object):
