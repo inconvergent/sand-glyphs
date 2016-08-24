@@ -63,7 +63,7 @@ def write(sand):
     print(y)
     for a, b in G.write(
         get_position_generator(y),
-        gnum = 2,
+        gnum = [2, 5],
         inum = 10000
         ):
 
