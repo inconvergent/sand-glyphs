@@ -17,11 +17,11 @@ from modules.helpers import _rnd_interpolate
 
 TWOPI = 2.0*pi
 
-def _interpolate_write_with_cursive(self, glyphs, inum, theta):
+def _interpolate_write_with_cursive(self, glyphs, inum, theta, noise):
   stack = row_stack(glyphs)
   ig = _rnd_interpolate(stack, len(glyphs)*inum, ordered=True)
 
-  gamma = theta + cumsum((1.0-2.0*random(len(ig)))*0.03)
+  gamma = theta + cumsum((1.0-2.0*random(len(ig)))*noise)
   dd = column_stack((cos(gamma), sin(gamma)))*self.offset_size
   a = ig + dd
   b = ig + dd[::-1,:]*array((1,-1))
@@ -36,12 +36,12 @@ def _get_glyph(gnum, height, width):
   else:
     n = gnum
 
-  if random()<0.08:
-    shift = ((-1)**randint(0,2))*2
+  if random()<0.2:
+    shift = ((-1)**randint(0,2))*1.7
   else:
     shift = 0
 
-  if random()<0.2:
+  if random()<0.0:
     a = sort(TWOPI*(random()+random(n)))[::-1]
     glyph = column_stack((cos(a), shift+sin(a))) \
         *array((width, height), 'float')*0.5
@@ -49,16 +49,16 @@ def _get_glyph(gnum, height, width):
     glyph = random_points_in_circle(
         n, 0, shift, 0.5
         )*array((width, height), 'float')
-
-    # if random()<0.5:
-    #   _spatial_sort(glyph)
+    _spatial_sort(glyph)
 
   return glyph
 
 def _spatial_sort(glyph):
   from scipy.spatial.distance import cdist
   from numpy import argsort
-  curr = 0
+  from numpy import argmin
+
+  curr = argmin(glyph[:,0])
   visited = set([curr])
   order = [curr]
 
@@ -81,19 +81,22 @@ class Glyphs(object):
       self,
       glyph_height,
       glyph_width,
-      offset_size
+      offset_size,
+      cursive_noise
       ):
     self.i = 0
 
     self.glyph_height = glyph_height
     self.glyph_width = glyph_width
     self.offset_size = offset_size
+    self.cursive_noise = cursive_noise
 
   def write(self, position_generator, gnum, inum):
     glyphs = []
 
     theta = random()*TWOPI
     pg = position_generator()
+    noise = self.cursive_noise
     try:
       while True:
         self.i += 1
@@ -107,12 +110,12 @@ class Glyphs(object):
           glyphs.append(glyph)
           continue
 
-        yield _interpolate_write_with_cursive(self, glyphs, inum, theta)
+        yield _interpolate_write_with_cursive(self, glyphs, inum, theta, noise)
         glyphs = []
 
     except StopIteration:
       try:
-        yield _interpolate_write_with_cursive(self, glyphs, inum, theta)
+        yield _interpolate_write_with_cursive(self, glyphs, inum, theta, noise)
       except ValueError:
         return
       except TypeError:

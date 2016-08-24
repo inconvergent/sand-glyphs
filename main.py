@@ -15,12 +15,13 @@ EDGE = 0.1
 
 GAMMA = 1.8
 
-GRAINS = 30
 
 GLYPH_HEIGHT = 0.01
 GLYPH_WIDTH = 0.005
 
-OFFSET_SIZE = 0.0012
+GRAINS = 30
+OFFSET_SIZE = 0.0015
+CURSIVE_NOISE = 0.01
 
 ROW_NUM = 20
 
@@ -30,11 +31,11 @@ def get_position_generator(y):
     x = EDGE
     c = 0
     while x<1.0-EDGE:
-      r = (0.8 + random()*1.0)*GLYPH_WIDTH
+      r = (0.9 + random()*1.1)*GLYPH_WIDTH
       new = False
 
       if c>2 and random()<0.15:
-        r += GLYPH_WIDTH*2
+        r += GLYPH_WIDTH*1.5
         new = True
         c = 0
 
@@ -55,7 +56,8 @@ def write(sand):
   G = Glyphs(
       GLYPH_HEIGHT,
       GLYPH_WIDTH,
-      OFFSET_SIZE
+      OFFSET_SIZE,
+      CURSIVE_NOISE
       )
 
   i = 0
@@ -64,7 +66,7 @@ def write(sand):
     for a, b in G.write(
         get_position_generator(y),
         gnum = [2, 5],
-        inum = 10000
+        inum = 20000
         ):
 
       # rgba = colors[i%nc]+[0.0001]
