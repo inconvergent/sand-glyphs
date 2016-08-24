@@ -6,7 +6,9 @@ from numpy import column_stack
 from numpy import cos
 from numpy import cumsum
 from numpy import pi
+from numpy import zeros
 from numpy import sin
+from numpy import sort
 from numpy import row_stack
 from numpy.random import random
 
@@ -27,20 +29,28 @@ def _interpolate_write_with_cursive(self, glyphs, inum, theta):
 
 def _get_glyph(gnum, height, width):
   from modules.helpers import random_points_in_circle
+  from numpy.random import randint
 
   if isinstance(gnum, list):
-    from numpy.random import randint
-    f = lambda: randint(*gnum)
+    n = randint(*gnum)
   else:
-    f = lambda: gnum
+    n = gnum
 
-  # a = sort(TWOPI*random(f()))[::-1]
-  # glyph = column_stack((cos(a), sin(a)))*array((width, height), 'float')*0.5
+  if random()<0.1:
+    shift = ((-1)**randint(0,2))*1.5
+  else:
+    shift = 0
 
-  glyph = + random_points_in_circle(
-      f(), 0, 0, 0.5
-      )*array((width, height), 'float')
-  _spatial_sort(glyph)
+  if random()<0.5:
+    a = sort(TWOPI*(random()+random(n)))[::1]
+    glyph = column_stack((cos(a), shift+sin(a))) \
+        *array((width, height), 'float')*0.5
+  else:
+    glyph = random_points_in_circle(
+        n, 0, shift, 0.5
+        )*array((width, height), 'float')
+
+    _spatial_sort(glyph)
 
   return glyph
 

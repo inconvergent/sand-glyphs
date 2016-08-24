@@ -17,7 +17,7 @@ GAMMA = 1.8
 
 GRAINS = 30
 
-GLYPH_HEIGHT = 0.02
+GLYPH_HEIGHT = 0.01
 GLYPH_WIDTH = 0.005
 
 OFFSET_SIZE = 0.0012
@@ -30,7 +30,7 @@ def get_position_generator(y):
     x = EDGE
     c = 0
     while x<1.0-EDGE:
-      r = (0.8 + random()*1.2)*GLYPH_WIDTH
+      r = (0.8 + random()*1.0)*GLYPH_WIDTH
       new = False
 
       if c>2 and random()<0.15:
@@ -63,7 +63,7 @@ def write(sand):
     print(y)
     for a, b in G.write(
         get_position_generator(y),
-        gnum = 10,
+        gnum = 2,
         inum = 10000
         ):
 
