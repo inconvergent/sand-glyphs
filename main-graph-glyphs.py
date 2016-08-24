@@ -33,7 +33,7 @@ def get_position_generator(y):
       r = (0.8 + random()*1.2)*GLYPH_WIDTH
       new = False
 
-      if c>2 and random()<0.1:
+      if c>2 and random()<0.15:
         r += GLYPH_WIDTH*2
         new = True
         c = 0
@@ -63,7 +63,7 @@ def write(sand):
     print(y)
     for a, b in G.write(
         get_position_generator(y),
-        gnum = 5,
+        gnum = 3,
         inum = 3000
         ):
       # rgba = colors[i%nc]+[0.0001]

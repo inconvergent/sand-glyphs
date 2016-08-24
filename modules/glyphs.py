@@ -43,9 +43,12 @@ def _write_graph_with_cursive(self, glyphs, inum, theta):
   mat = zeros((len(xy), len(xy)), 'float')
 
   for a,b,c in tri.simplices:
-    mat[a,b] = (xy[a,0]-xy[b,0])**2.0 + (xy[a,1]-xy[b,1])**2.0
-    mat[b,c] = (xy[b,0]-xy[c,0])**2.0 + (xy[b,1]-xy[c,1])**2.0
-    mat[c,a] = (xy[c,0]-xy[a,0])**2.0 + (xy[c,1]-xy[a,1])**2.0
+    if b>a:
+      mat[a,b] = (xy[a,0]-xy[b,0])**2.0 + (xy[a,1]-xy[b,1])**2.0
+    if c>b:
+      mat[b,c] = (xy[b,0]-xy[c,0])**2.0 + (xy[b,1]-xy[c,1])**2.0
+    if a>c:
+      mat[c,a] = (xy[c,0]-xy[a,0])**2.0 + (xy[c,1]-xy[a,1])**2.0
 
   mat = (sqrt(mat)/self.glyph_width*10000).astype('int')
   mst = minimum_spanning_tree(csr_matrix(mat))
@@ -59,7 +62,7 @@ def _write_graph_with_cursive(self, glyphs, inum, theta):
         linspace(xy[i,0], xy[j,0], inum),
         linspace(xy[i,1], xy[j,1], inum)
         ))
-      gamma = theta + cumsum((1.0-2.0*random(inum))*0.07)
+      gamma = theta + cumsum((1.0-2.0*random(inum))*0.01)
       dd = column_stack((cos(gamma), sin(gamma)))*self.offset_size
       aa.append(ig + dd)
       bb.append(ig + dd[::-1,:]*array((1,-1)))
