@@ -36,13 +36,13 @@ def _get_glyph(gnum, height, width):
   else:
     n = gnum
 
-  if random()<0.1:
-    shift = ((-1)**randint(0,2))*1.5
+  if random()<0.08:
+    shift = ((-1)**randint(0,2))*2
   else:
     shift = 0
 
-  if random()<0.5:
-    a = sort(TWOPI*(random()+random(n)))[::1]
+  if random()<0.2:
+    a = sort(TWOPI*(random()+random(n)))[::-1]
     glyph = column_stack((cos(a), shift+sin(a))) \
         *array((width, height), 'float')*0.5
   else:
@@ -50,7 +50,8 @@ def _get_glyph(gnum, height, width):
         n, 0, shift, 0.5
         )*array((width, height), 'float')
 
-    _spatial_sort(glyph)
+    # if random()<0.5:
+    #   _spatial_sort(glyph)
 
   return glyph
 
