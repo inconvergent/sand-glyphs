@@ -2,8 +2,6 @@
 
 ![img](/img/img3.png?raw=true "img")
 
-![img](/img/img2.png?raw=true "img")
-
 ![img](/img/img.png?raw=true "img")
 
 ## Requires
