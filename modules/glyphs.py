@@ -86,80 +86,80 @@ class Glyphs(object):
       self,
       glyph_height,
       glyph_width,
+      edge = 0.1
       ):
     self.i = 0
 
     self.glyph_height = glyph_height
     self.glyph_width = glyph_width
+    self.edge = edge
+    self._previous_word = None
 
-  def write(self, position_generator, gnum, inum, cursive_noise, offset_size):
+  def write(self, word_generator, y, gnum, inum, cursive_noise, offset_size):
     glyphs = []
 
     theta = random()*TWOPI
-    pg = position_generator()
-    try:
-      while True:
-        self.i += 1
-        x, y, new = next(pg)
+    wg = word_generator()
+    cursor = self.edge
 
-        glyph = array((x, y), 'float') + _get_glyph(
+    while True:
+      self.i += 1
+
+      # TODO: this could result in deadlocs for the wrong word gen.
+      if not self._previous_word:
+        word = next(wg)
+      else:
+        word = self._previous_word
+        self._previous_word = None
+
+      if (cursor+sum(word)) > (1.0-self.edge):
+        self._previous_word = word
+        return
+
+      for w in word:
+        cursor += w
+        glyph = array((cursor, y), 'float') + _get_glyph(
             gnum, self.glyph_height, self.glyph_width
             )
+        glyphs.append(glyph)
 
-        if not new:
-          glyphs.append(glyph)
-          continue
+      self._current_glyph = glyphs
+      yield _interpolate_write_with_cursive(
+          glyphs,
+          inum,
+          theta,
+          cursive_noise,
+          offset_size
+          )
+      glyphs = []
 
-        self._current_glyph = glyphs
-        yield _interpolate_write_with_cursive(
-            glyphs,
-            inum,
-            theta,
-            cursive_noise,
-            offset_size
-            )
-        glyphs = []
-
-    except StopIteration:
-      try:
-        self._current_glyph = glyphs
-        yield _interpolate_write_with_cursive(
-            glyphs,
-            inum,
-            theta,
-            cursive_noise,
-            offset_size
-            )
-      except ValueError:
-        return
-      except TypeError:
-        return
-
-  def export(self, position_generator, gnum, inum):
+  def export(self, word_generator, y, gnum, inum):
     glyphs = []
 
-    pg = position_generator()
-    try:
-      while True:
-        self.i += 1
-        x, y, new = next(pg)
+    wg = word_generator()
+    cursor = self.edge
 
-        glyph = array((x, y), 'float') + _get_glyph(
+    while True:
+      self.i += 1
+
+      if not self._previous_word:
+        word = next(wg)
+      else:
+        word = self._previous_word
+        self._previous_word = None
+
+      if (cursor+sum(word)) > (1.0-self.edge):
+        self._previous_word = word
+        return
+
+      for w in word:
+        cursor += w
+        glyph = array((cursor, y), 'float') + _get_glyph(
             gnum, self.glyph_height, self.glyph_width
             )
+        glyphs.append(glyph)
 
-        if not new:
-          glyphs.append(glyph)
-          continue
-
-        yield _export(self, glyphs, inum)
-        glyphs = []
-
-    except StopIteration:
-      try:
-        yield _export(self, glyphs, inum)
-      except ValueError:
-        return
-      except TypeError:
-        return
+      self._current_glyph = glyphs
+      yield _export(self, glyphs, inum)
+      glyphs = []
 

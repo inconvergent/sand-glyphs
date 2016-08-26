@@ -28,24 +28,16 @@ INUM = 200
 GNUM = [2, 4]
 
 
-def get_position_generator(y):
-  def position_generator():
-    x = EDGE
-    c = 0
-    while x<1.0-EDGE:
-      r = (0.8 + random()*1.2)*GLYPH_WIDTH
-      new = False
-
-      if c>2 and random()<0.15:
-        r += GLYPH_WIDTH*2
-        new = True
-        c = 0
-
-      x += r
-      if not new:
-        c += 1
-      yield x, y, new
-  return position_generator
+def get_word_generator():
+  def word_generator():
+    while True:
+      word = []
+      while random()>0.15:
+        r = (0.9 + random()*1.1)*GLYPH_WIDTH
+        word.append(r)
+      if len(word)>2:
+        yield word
+  return word_generator
 
 
 def write(sand):
@@ -65,7 +57,8 @@ def write(sand):
   for y in linspace(EDGE, 1.0-EDGE, ROW_NUM):
     print(y)
     for a in G.export(
-        get_position_generator(y),
+        get_word_generator(),
+        y,
         gnum = GNUM,
         inum = INUM
         ):
