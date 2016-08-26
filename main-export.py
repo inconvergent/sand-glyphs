@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-
 from numpy import linspace
 from numpy.random import random
 
@@ -21,6 +20,10 @@ GAMMA = 1.8
 
 GLYPH_HEIGHT = 0.01
 GLYPH_WIDTH = 0.005
+WORD_SPACE = GLYPH_WIDTH*1.2
+
+SHIFT_PROB = 0.2
+SHIFT_SIZE = 1.7
 
 ROW_NUM = 20
 
@@ -41,22 +44,26 @@ def get_word_generator():
 
 
 def write(sand):
-  from modules.glyphs import Glyphs
+  from modules.writer import Writer
 
   lines = []
   vertices = []
 
   vnum = 0
 
-  G = Glyphs(
+  W = Writer(
       GLYPH_HEIGHT,
-      GLYPH_WIDTH
+      GLYPH_WIDTH,
+      WORD_SPACE,
+      SHIFT_PROB,
+      SHIFT_SIZE,
+      EDGE
       )
 
   i = 0
   for y in linspace(EDGE, 1.0-EDGE, ROW_NUM):
     print(y)
-    for a in G.export(
+    for a in W.export(
         get_word_generator(),
         y,
         gnum = GNUM,

@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-
 from numpy import linspace
 # from numpy import row_stack
 # from numpy import ones
@@ -21,6 +20,10 @@ GAMMA = 1.8
 
 GLYPH_HEIGHT = 0.01
 GLYPH_WIDTH = 0.005
+WORD_SPACE = GLYPH_WIDTH*1.2
+
+SHIFT_PROB = 0.2
+SHIFT_SIZE = 1.7
 
 GRAINS = 30
 OFFSET_SIZE = 0.0015
@@ -46,22 +49,25 @@ def get_word_generator():
 
 
 def write(sand):
-  from modules.glyphs import Glyphs
+  from modules.writer import Writer
   # from modules.helpers import get_colors
 
   # colors = get_colors('../colors/ir.jpg')
   # nc = len(colors)
 
-  G = Glyphs(
+  W = Writer(
       GLYPH_HEIGHT,
       GLYPH_WIDTH,
-      EDGE
+      WORD_SPACE,
+      SHIFT_PROB,
+      SHIFT_SIZE,
+      EDGE,
       )
 
   i = 0
   for y in linspace(EDGE, 1.0-EDGE, ROW_NUM):
     print(y)
-    for a, b in G.write(
+    for a, b in W.write(
         get_word_generator(),
         y,
         gnum = GNUM,
@@ -76,7 +82,7 @@ def write(sand):
       i += 1
 
       # sand.set_rgba(RED)
-      # xy = row_stack(G._current_glyph)
+      # xy = row_stack(W._current_glyph)
       # sand.paint_spheres(xy,ones(len(xy), 'float')*ONE*3.5,3000)
 
 
