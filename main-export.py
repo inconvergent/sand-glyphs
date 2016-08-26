@@ -12,18 +12,20 @@ from numpy import row_stack
 BACK = [1,1,1,1]
 FRONT = [0,0,0,0.6]
 
-SIZE = 1200
+SIZE = 1400
 ONE = 1./SIZE
 EDGE = 0.1
 
 GAMMA = 1.8
 
-GLYPH_HEIGHT = 0.02
+
+GLYPH_HEIGHT = 0.01
 GLYPH_WIDTH = 0.005
 
-OFFSET_SIZE = 0.0012
-
 ROW_NUM = 20
+
+INUM = 200
+GNUM = [2, 4]
 
 
 def get_position_generator(y):
@@ -56,17 +58,16 @@ def write(sand):
 
   G = Glyphs(
       GLYPH_HEIGHT,
-      GLYPH_WIDTH,
-      OFFSET_SIZE
+      GLYPH_WIDTH
       )
 
   i = 0
   for y in linspace(EDGE, 1.0-EDGE, ROW_NUM):
     print(y)
-    for a, b in G.write(
+    for a in G.export(
         get_position_generator(y),
-        gnum = 2,
-        inum = 200
+        gnum = GNUM,
+        inum = INUM
         ):
 
       sand.paint_dots(a)

@@ -3,11 +3,14 @@
 
 
 from numpy import linspace
+# from numpy import row_stack
+# from numpy import ones
 from numpy.random import random
 
 
 BACK = [1,1,1,1]
 FRONT = [0,0,0,0.0001]
+RED = [1,0,0,0.01]
 
 SIZE = 1400
 ONE = 1./SIZE
@@ -21,9 +24,13 @@ GLYPH_WIDTH = 0.005
 
 GRAINS = 30
 OFFSET_SIZE = 0.0015
+
 CURSIVE_NOISE = 0.01
 
 ROW_NUM = 20
+
+INUM = 20000
+GNUM = [2, 4]
 
 
 def get_position_generator(y):
@@ -55,9 +62,7 @@ def write(sand):
 
   G = Glyphs(
       GLYPH_HEIGHT,
-      GLYPH_WIDTH,
-      OFFSET_SIZE,
-      CURSIVE_NOISE
+      GLYPH_WIDTH
       )
 
   i = 0
@@ -65,14 +70,20 @@ def write(sand):
     print(y)
     for a, b in G.write(
         get_position_generator(y),
-        gnum = [2, 5],
-        inum = 20000
+        gnum = GNUM,
+        inum = INUM,
+        cursive_noise = CURSIVE_NOISE,
+        offset_size = OFFSET_SIZE
         ):
 
       # rgba = colors[i%nc]+[0.0001]
-      # sand.set_rgba(rgba)
+      # sand.set_rgba(FRONT)
       sand.paint_strokes(a, b, GRAINS)
       i += 1
+
+      # sand.set_rgba(RED)
+      # xy = row_stack(G._current_glyph)
+      # sand.paint_spheres(xy,ones(len(xy), 'float')*ONE*3.5,3000)
 
 
 def main():

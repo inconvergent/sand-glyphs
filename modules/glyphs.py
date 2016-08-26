@@ -17,15 +17,20 @@ from modules.helpers import _rnd_interpolate
 
 TWOPI = 2.0*pi
 
-def _interpolate_write_with_cursive(self, glyphs, inum, theta, noise):
+def _interpolate_write_with_cursive(glyphs, inum, theta, noise, offset_size):
   stack = row_stack(glyphs)
   ig = _rnd_interpolate(stack, len(glyphs)*inum, ordered=True)
 
   gamma = theta + cumsum((1.0-2.0*random(len(ig)))*noise)
-  dd = column_stack((cos(gamma), sin(gamma)))*self.offset_size
+  dd = column_stack((cos(gamma), sin(gamma)))*offset_size
   a = ig + dd
   b = ig + dd[::-1,:]*array((1,-1))
   return a, b
+
+def _export(self, glyphs, inum):
+  stack = row_stack(glyphs)
+  ig = _rnd_interpolate(stack, len(glyphs)*inum, ordered=True)
+  return ig
 
 def _get_glyph(gnum, height, width):
   from modules.helpers import random_points_in_circle
@@ -81,22 +86,17 @@ class Glyphs(object):
       self,
       glyph_height,
       glyph_width,
-      offset_size,
-      cursive_noise
       ):
     self.i = 0
 
     self.glyph_height = glyph_height
     self.glyph_width = glyph_width
-    self.offset_size = offset_size
-    self.cursive_noise = cursive_noise
 
-  def write(self, position_generator, gnum, inum):
+  def write(self, position_generator, gnum, inum, cursive_noise, offset_size):
     glyphs = []
 
     theta = random()*TWOPI
     pg = position_generator()
-    noise = self.cursive_noise
     try:
       while True:
         self.i += 1
@@ -110,12 +110,54 @@ class Glyphs(object):
           glyphs.append(glyph)
           continue
 
-        yield _interpolate_write_with_cursive(self, glyphs, inum, theta, noise)
+        self._current_glyph = glyphs
+        yield _interpolate_write_with_cursive(
+            glyphs,
+            inum,
+            theta,
+            cursive_noise,
+            offset_size
+            )
         glyphs = []
 
     except StopIteration:
       try:
-        yield _interpolate_write_with_cursive(self, glyphs, inum, theta, noise)
+        self._current_glyph = glyphs
+        yield _interpolate_write_with_cursive(
+            glyphs,
+            inum,
+            theta,
+            cursive_noise,
+            offset_size
+            )
+      except ValueError:
+        return
+      except TypeError:
+        return
+
+  def export(self, position_generator, gnum, inum):
+    glyphs = []
+
+    pg = position_generator()
+    try:
+      while True:
+        self.i += 1
+        x, y, new = next(pg)
+
+        glyph = array((x, y), 'float') + _get_glyph(
+            gnum, self.glyph_height, self.glyph_width
+            )
+
+        if not new:
+          glyphs.append(glyph)
+          continue
+
+        yield _export(self, glyphs, inum)
+        glyphs = []
+
+    except StopIteration:
+      try:
+        yield _export(self, glyphs, inum)
       except ValueError:
         return
       except TypeError:
