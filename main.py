@@ -28,6 +28,8 @@ SHIFT_SIZE = 1.7
 GRAINS = 30
 OFFSET_SIZE = 0.0015
 
+DOT_DST = 0.2
+
 CURSIVE_NOISE = 0.01
 
 ROW_NUM = 20
@@ -61,6 +63,7 @@ def write(sand):
       WORD_SPACE,
       SHIFT_PROB,
       SHIFT_SIZE,
+      DOT_DST,
       EDGE,
       )
 

@@ -4,38 +4,28 @@ from numpy.random import random
 from numpy.random import randint
 
 from numpy import array
-from numpy import column_stack
-from numpy import cos
-from numpy import sin
-from numpy import sort
 from numpy import pi
 
-from modules.utils import random_points_in_circle
+# from modules.utils import random_points_in_circle
+from modules.utils import darts
 from modules.utils import _spatial_sort
 
 TWOPI = 2.0*pi
 
 
-def _get_glyph(gnum, height, width, shift_prob, shift_size):
-  if isinstance(gnum, list):
-    n = randint(*gnum)
-  else:
-    n = gnum
+def _get_glyph(gnum, height, width, shift_prob, shift_size, dst):
 
   if random()<shift_prob:
     shift = ((-1)**randint(0,2))*shift_size
   else:
     shift = 0
 
-  if random()<0.0:
-    a = sort(TWOPI*(random()+random(n)))[::-1]
-    glyph = column_stack((cos(a), shift+sin(a))) \
-        *array((width, height), 'float')*0.5
-  else:
-    glyph = random_points_in_circle(
-        n, 0, shift, 0.5
+  while True:
+    glyph = darts(
+        gnum[1], 0, shift, 0.5, dst
         )*array((width, height), 'float')
-    _spatial_sort(glyph)
-
-  return glyph
+    if len(glyph)>gnum[0]:
+      break
+  _spatial_sort(glyph)
+  return glyph[::-1,:]
 

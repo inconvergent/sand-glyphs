@@ -25,6 +25,8 @@ WORD_SPACE = GLYPH_WIDTH*1.2
 SHIFT_PROB = 0.2
 SHIFT_SIZE = 1.7
 
+DOT_DST = 0.2
+
 ROW_NUM = 20
 
 INUM = 200
@@ -57,6 +59,7 @@ def write(sand):
       WORD_SPACE,
       SHIFT_PROB,
       SHIFT_SIZE,
+      DOT_DST,
       EDGE
       )
 

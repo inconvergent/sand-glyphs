@@ -20,7 +20,8 @@ class Writer(object):
       word_space,
       shift_prob,
       shift_size,
-      edge = 0.1
+      dot_dst,
+      edge
       ):
     self.i = 0
 
@@ -29,7 +30,10 @@ class Writer(object):
     self.word_space = word_space
     self.shift_prob = shift_prob
     self.shift_size = shift_size
+    self.dot_dst = dot_dst
+
     self.edge = edge
+
     self._previous_word = None
 
   def write(self, word_generator, y, gnum, inum, cursive_noise, offset_size):
@@ -60,7 +64,8 @@ class Writer(object):
             self.glyph_height,
             self.glyph_width,
             self.shift_prob,
-            self.shift_size
+            self.shift_size,
+            self.dot_dst
             )
         glyphs.append(glyph)
 
@@ -101,7 +106,8 @@ class Writer(object):
             self.glyph_height,
             self.glyph_width,
             self.shift_prob,
-            self.shift_size
+            self.shift_size,
+            self.dot_dst
             )
         glyphs.append(glyph)
 
