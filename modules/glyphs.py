@@ -27,5 +27,5 @@ def _get_glyph(gnum, height, width, shift_prob, shift_size, dst):
     if len(glyph)>gnum[0]:
       break
   _spatial_sort(glyph)
-  return glyph[::-1,:]
+  return glyph
 
