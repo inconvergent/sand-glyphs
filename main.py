@@ -3,12 +3,13 @@
 
 from numpy import linspace
 # from numpy import row_stack
-# from numpy import ones
+from numpy import ones
 from numpy.random import random
 
 
+
 BACK = [1,1,1,1]
-FRONT = [0,0,0,0.0001]
+FRONT = [0,0,0,0.004]
 RED = [1,0,0,0.01]
 
 SIZE = 1400
@@ -25,15 +26,15 @@ WORD_SPACE = GLYPH_WIDTH*1.2
 SHIFT_PROB = 0.2
 SHIFT_SIZE = 1.7
 
-GRAINS = 30
-OFFSET_SIZE = 0.0015
+GRAINS = 2
+OFFSET_SIZE = 0.002
 
-CURSIVE_NOISE = 0.01
+CURSIVE_NOISE = 0.03
 
 ROW_NUM = 20
 
-INUM = 20000
-GNUM = [2, 4]
+INUM = 5000
+GNUM = [2, 6]
 
 
 def get_word_generator():
@@ -78,7 +79,7 @@ def write(sand):
 
       # rgba = colors[i%nc]+[0.0001]
       # sand.set_rgba(FRONT)
-      sand.paint_strokes(a, b, GRAINS)
+      sand.paint_strokes(a, b, ones(len(a), 'int')*GRAINS)
       i += 1
 
       # sand.set_rgba(RED)
@@ -98,6 +99,7 @@ def main():
   write(sand)
   # sand.set_bg(bw)
   name = fn.name()
+  sand.set_transparent_pixel()
   sand.write_to_png(name, GAMMA)
 
 

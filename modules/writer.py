@@ -32,10 +32,18 @@ class Writer(object):
     self.edge = edge
     self._previous_word = None
 
-  def write(self, word_generator, y, gnum, inum, cursive_noise, offset_size):
+  def write(
+      self,
+      word_generator,
+      y,
+      gnum,
+      inum,
+      cursive_noise,
+      offset_size,
+      theta=0.2
+      ):
     glyphs = []
 
-    theta = random()*TWOPI
     wg = word_generator()
     cursor = self.edge
 

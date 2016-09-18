@@ -14,9 +14,11 @@ from numpy import logical_not
 from numpy import pi
 from numpy import reshape
 from numpy import row_stack
+from numpy import ones
 from numpy import sin
 from numpy import sort
 from numpy import zeros
+from numpy.linalg import norm
 
 TWOPI = 2.0*pi
 
@@ -25,11 +27,11 @@ TWOPI = 2.0*pi
 def _interpolate_write_with_cursive(glyphs, inum, theta, noise, offset_size):
   stack = row_stack(glyphs)
   ig = _rnd_interpolate(stack, len(glyphs)*inum, ordered=True)
-
   gamma = theta + cumsum((1.0-2.0*random(len(ig)))*noise)
   dd = column_stack((cos(gamma), sin(gamma)))*offset_size
   a = ig + dd
-  b = ig + dd[::-1,:]*array((1,-1))
+  b = ig + dd[:,::-1]*array((1,-1))
+
   return a, b
 
 
