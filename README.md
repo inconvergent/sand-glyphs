@@ -10,5 +10,5 @@
 
 https://github.com/inconvergent/fast-sand-paint
 
-https://github.com/inconvergent/fn-python3
+https://github.com/inconvergent/fn
 
